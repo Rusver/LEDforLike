@@ -1,51 +1,28 @@
-import paho.mqtt.client as mqtt
-import os
+"""This module exposes a class that handles all MQTT interactions"""
+import logging
+import json
+import paho.mqtt.client as paho
+import settings as Config
+from msg import Msg
+
+# pylint: disable=too-few-public-methods
 
 
-def on_connect(client, userdata, flags, rc):
-    print("rc: " + str(rc))
+class MqttClient:
+    """A facade api to  MQTT client"""
 
-def on_message(client, obj, msg):
-    print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
+    def __init__(self):
+        self.mqttc = paho.Client()
+        self.mqttc.username_pw_set(Config.MQTT_USER, Config.MQTT_PWD)
 
-def on_publish(client, obj, mid):
-    print("mid: " + str(mid))
+        logging.warning(
+            'Trying to establish connection to ' + Config.MQTT_HOST)
+        try:
+            self.mqttc.connect(Config.MQTT_HOST, Config.MQTT_PORT)
+        except ValueError:
+            logging.critical(
+                "Oops! connection to '%s' couldn't be established", Config.MQTT_HOST)
 
-def on_subscribe(client, obj, mid, granted_qos):
-    print("Subscribed: " + str(mid) + " " + str(granted_qos))
-
-def on_log(client, obj, level, string):
-    print(string)
-
-mqttc = mqtt.Client()
-# Assign event callbacks
-mqttc.on_message = on_message
-mqttc.on_connect = on_connect
-mqttc.on_publish = on_publish
-mqttc.on_subscribe = on_subscribe
-
-# Uncomment to enable debug messages
-#mqttc.on_log = on_log
-
-'''
-    # Parse CLOUDMQTT_URL (or fallback to localhost)
-url_str = os.environ.get('CLOUDMQTT_URL', 'mqtt://localhost:1883')
-url = urlparse.urlparse(url_str)
-topic = url.path[1:] or 'test'
-    '''
-
-# Connect
-mqttc.username_pw_set('zdyyuldx', '72gARbKu2b_W')
-mqttc.connect('m11.cloudmqtt.com', 17327)
-
-# Start subscribe, with QoS level 0
-#mqttc.subscribe('test', 0)
-
-# Publish a message
-mqttc.publish('test', "my message")
-
-# Continue the network loop, exit when an error occurs
-rc = 0
-while rc == 0:
-    rc = mqttc.loop()
-print("rc: " + str(rc))
+    """Publishes a new message to a topic"""
+    def publish(self, topic: str, message: Msg):
+        return self.mqttc.publish(topic, json.dumps(message.__dict__))
