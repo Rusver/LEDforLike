@@ -33,7 +33,7 @@ class Server(object):
 				"topic" 	: "LIKE",
 				"user_id" 	: content['entry'][0]['changes'][0]['value']['sender_id']
 				}
-			Server.MQTTC.publish(Config.MQTT_FB_WEBHOOK_TOPIC_NAME, msg)
+			MQTTC.publish(Config.MQTT_FB_WEBHOOK_TOPIC_NAME, msg)
 		
 		logging.info('Handled webhook request' + str(content))
 		return ''
