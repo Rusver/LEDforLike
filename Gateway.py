@@ -24,9 +24,9 @@ class Server(object):
 	@app.route("/webhook", methods=['POST'])
 	def fb_feeds_webhook():
 		"""webhook api"""
-		logging.debug('Handling webhook request!!')
+		print('Handling webhook request!!')
 		content = request.get_json()
-		print str(content)
+		print (content)
 		if content['entry'][0]['changes'][0]['value']['item'] == 'like':
 			msg = {
 				"time" 		: int(content['entry'][0]['time']),
@@ -35,7 +35,7 @@ class Server(object):
 				}
 			Server.MQTTC.publish('Facebook', msg)
 		
-		logging.info('Handled webhook request' + str(content))
+		print('Handled webhook request' + str(content))
 		return ''
 
 
