@@ -32,11 +32,14 @@ class Server(object):
 				"topic" 	: "LIKE",
 				"user_id" 	: content['entry'][0]['changes'][0]['value']['user_id']
 				}
+			Server = Server() # ???
 			Server.MQTTC.publish(os.environ('MQTT_FB_WEBHOOK_TOPIC_NAME'), msg)
 		
 		logging.info('Handled webhook request' + str(content))
 		return ''
 
-	if __name__ == '__main__':
-		app.debug = True
-		app.run(host = '0.0.0.0', port = int(os.environ.get("PORT", 5000)))
+
+
+if __name__ == '__main__':
+	app.debug = True
+	app.run(host = '0.0.0.0', port = int(os.environ.get("PORT", 5000)))
