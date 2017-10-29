@@ -6,7 +6,6 @@ import os
 import logging
 import settings as Config
 from mqtt import MqttClient
-from msg import Msg
 
 """Server class"""
 class Server(object):
@@ -17,26 +16,6 @@ class Server(object):
 	def Welcome():
 		return "Welcome to my page :)"
 
-	@app.route('/articles')
-	def api_articles():
-		return 'List of articles'
-
-	@app.route('/articles/<articleid>')
-	def api_article(articleid):
-		return 'You are reading ' + articleid
-
-	@app.route('/json', methods = ['GET', 'POST'])
-	def api_json():
-		data = {k:v for k,v in request.args.items()}
-		return json.dumps(data)
-
-	@app.route('/hello', methods = ['GET', 'POST'])
-	def api_hello():
-		data = {
-			'hello'  : 'world',
-			'number' : 3
-		}
-		return json.dumps(data)
 
 	"""webhook api"""
 	@app.route("/webhook", methods=['GET'])
@@ -49,14 +28,16 @@ class Server(object):
 		logging.debug('Handling webhook request!!')
 		content = request.get_json()
 		if content['entry'][0]['changes'][0]['value']['item'] == 'like':
-			Server.MQTTC.publish(
-				Config.MQTT_FB_WEBHOOK_TOPIC_NAME, Msg(
-					int(content['entry'][0]['time']),'LIKE',
-					content['entry'][0]['changes'][0]['value']['user_id']))
+			msg = {
+				"time" 		: int(content['entry'][0]['time']),
+				"topic" 	: "LIKE",
+				"user_id" 	: content['entry'][0]['changes'][0]['value']['sender_id']
+				}
+			Server.MQTTC.publish(Config.MQTT_FB_WEBHOOK_TOPIC_NAME, msg)
 		
-		logging.info('Handled webhook request ' + str(content))
+		logging.info('Handled webhook request' + str(content))
 		return ''
-		
+
 	if __name__ == '__main__':
 		app.debug = True
 		app.run(host = '0.0.0.0', port = int(os.environ.get("PORT", 5000)))

@@ -3,10 +3,8 @@ import logging
 import json
 import paho.mqtt.client as paho
 import settings as Config
-from msg import Msg
 
 # pylint: disable=too-few-public-methods
-
 
 class MqttClient:
     """A facade api to  MQTT client"""
@@ -24,5 +22,6 @@ class MqttClient:
                 "Oops! connection to '%s' couldn't be established", Config.MQTT_HOST)
 
     """Publishes a new message to a topic"""
-    def publish(self, topic: str, message: Msg):
-        return self.mqttc.publish(topic, json.dumps(message.__dict__))
+    def publish(self, topic, message):
+        return self.mqttc.publish(topic, json.dumps(message))
+        #return self.mqttc.publish(topic, json.dumps(message))
