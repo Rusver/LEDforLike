@@ -1,6 +1,7 @@
 """This module exposes a class that handles all MQTT interactions"""
 import logging
 import json
+import os
 import paho.mqtt.client as paho
 
 # pylint: disable=too-few-public-methods
