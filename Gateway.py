@@ -26,14 +26,13 @@ class Server(object):
 		"""webhook api"""
 		print('Handling webhook request!!')
 		content = request.get_json()
-		print (content)
 		if content['entry'][0]['changes'][0]['value']['item'] == 'like':
 			msg = {
 				"time" 		: int(content['entry'][0]['time']),
 				"topic" 	: "LIKE",
 				"user_id" 	: content['entry'][0]['changes'][0]['value']['user_id']
 				}
-			Server.MQTTC.publish('Facebook', msg)
+			Server.MQTTC.publish(Server.MQTTC, 'Facebook', msg)
 		
 		print('Handled webhook request' + str(content))
 		return ''
