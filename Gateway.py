@@ -4,7 +4,6 @@ from flask import Response
 from flask import request
 import os
 import logging
-import settings as Config
 from mqtt import MqttClient
 
 """Server class"""
