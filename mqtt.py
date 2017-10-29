@@ -11,12 +11,12 @@ class MqttClient:
 
     def __init__(self):
         self.mqttc = paho.Client()
-        self.mqttc.username_pw_set(os.environ('MQTT_USER'),os.environ('MQTT_PWD'))
+        self.mqttc.username_pw_set(os.environ.get('MQTT_USER'),os.environ.get('MQTT_PWD'))
 
         logging.warning(
-            'Trying to establish connection to ' + os.environ('MQTT_HOST'))
+            'Trying to establish connection to ' + os.environ.get('MQTT_HOST'))
         try:
-            self.mqttc.connect(os.environ('MQTT_HOST'), os.environ('MQTT_PORT'))
+            self.mqttc.connect(os.environ.get('MQTT_HOST'), os.environ.get('MQTT_PORT'))
         except ValueError:
             logging.critical(
                 "Oops! connection to '%s' couldn't be established", Config.MQTT_HOST)
