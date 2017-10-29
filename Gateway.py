@@ -26,6 +26,7 @@ class Server(object):
 		"""webhook api"""
 		logging.debug('Handling webhook request!!')
 		content = request.get_json()
+		print content
 		if content['entry'][0]['changes'][0]['value']['item'] == 'like':
 			msg = {
 				"time" 		: int(content['entry'][0]['time']),
