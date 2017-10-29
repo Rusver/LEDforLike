@@ -30,7 +30,7 @@ class Server(object):
 			msg = {
 				"time" 		: int(content['entry'][0]['time']),
 				"topic" 	: "LIKE",
-				"user_id" 	: content['entry'][0]['changes'][0]['value']['sender_id']
+				"user_id" 	: content['entry'][0]['changes'][0]['value']['user_id']
 				}
 			Server.MQTTC.publish(os.environ('MQTT_FB_WEBHOOK_TOPIC_NAME'), msg)
 		
