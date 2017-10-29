@@ -32,7 +32,7 @@ class Server(object):
 				"topic" 	: "LIKE",
 				"user_id" 	: content['entry'][0]['changes'][0]['value']['user_id']
 				}
-			Server.MQTTC.publish(Server.MQTTC, 'Facebook', msg)
+			Server.MQTTC.publish('Facebook', msg)
 		
 		print('Handled webhook request' + str(content))
 		return ''

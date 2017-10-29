@@ -23,5 +23,6 @@ class MqttClient:
 
     """Publishes a new message to a topic"""
     def publish(self, topic, message):
+        print "posting on mqtt..."
         return self.mqttc.publish(topic, json.dumps(message))
         #return self.mqttc.publish(topic, json.dumps(message))
