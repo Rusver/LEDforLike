@@ -2,7 +2,6 @@
 import logging
 import json
 import paho.mqtt.client as paho
-import settings as Config
 
 # pylint: disable=too-few-public-methods
 
