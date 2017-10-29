@@ -11,7 +11,7 @@ class MqttClient:
 
     def __init__(self):
         self.mqttc = paho.Client()
-        self.mqttc.username_pw_set(os.environ.get('MQTT_USER'),os.environ.get('MQTT_PWD'))
+        self.mqttc.username_pw_set(os.environ.get('MQTT_USER'),int(os.environ.get('MQTT_PWD')))
 
         logging.warning(
             'Trying to establish connection to ' + os.environ.get('MQTT_HOST'))
